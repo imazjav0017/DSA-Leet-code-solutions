@@ -1,21 +1,24 @@
 class Solution {
     public int characterReplacement(String s, int k) {
-        Map<Character,Integer>map=new HashMap<>();
-        int l=0;
-        int res=0;
-        int maxF=0;
-        for(int r=0;r<s.length();r++){
-            int count=map.getOrDefault(s.charAt(r),0)+1;
-            map.put(s.charAt(r),count);
-            if(maxF<count) maxF=count;
-            while((r-l+1)-maxF>k){
-                map.put(s.charAt(l),map.getOrDefault(s.charAt(l),0)-1);
-                l++;
-            }
-            if(res<(r-l+1)){
-                res=r-l+1;
+        int ans = 0;
+        int n = s.length();
+        for (char c = 'A'; c <= 'Z'; c++) {
+            int i = 0, j = 0, replaced = 0;
+            while (j < n) {
+                if (s.charAt(j) == c) {
+                    j++;
+                } else if (replaced < k) {
+                    j++;
+                    replaced++;
+                } else if (s.charAt(i) == c) {
+                    i++;
+                } else {
+                    i++;
+                    replaced--;
+                }
+                ans = Math.max(ans, j - i);
             }
         }
-        return res;
+        return ans;
     }
 }
