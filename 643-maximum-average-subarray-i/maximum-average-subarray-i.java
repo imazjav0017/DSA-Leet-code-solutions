@@ -11,8 +11,7 @@ class Solution {
         left++;
          
         while(right<n){
-            sum+=nums[right];
-            sum-=nums[left-1];
+            sum+=nums[right]-nums[left-1];
             maxAvg=Math.max(maxAvg,sum/k);
             left++;
             right++;
