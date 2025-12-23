@@ -28,10 +28,6 @@ class Solution {
         }
         currentSum+=root.val;
         list.add(root.val);
-        System.out.println("_________root.val_____"+root.val);
-        for(int i:list){
-            System.out.println(i+",");
-        }
         if(currentSum == targetSum && root.left==null && root.right==null){
             res.add(new ArrayList<>(list));
         }
