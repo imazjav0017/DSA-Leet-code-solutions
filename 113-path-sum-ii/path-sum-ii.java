@@ -14,13 +14,6 @@
  * }
  */
 class Solution {
-    int findSum(List<Integer> x){
-        int sum=0;
-        for(int i:x){
-            sum+=i;
-        }
-        return sum;
-    }
     List<List<Integer>> res=new ArrayList<>();
     public void sum(TreeNode root,int currentSum, List<Integer>list,int targetSum){
         if(root==null){
