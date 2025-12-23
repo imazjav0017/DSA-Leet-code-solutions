@@ -34,7 +34,7 @@ class Solution {
         for(int i=0;i<n;i++){
             s+=searchWord.charAt(i);
             start=first(products,s,start);
-            System.out.println(start);
+            //System.out.println(start);
             List<String>list=search(products,s,start);
             res.add(list);
         }
