@@ -10,15 +10,21 @@
 
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root==null)
+         if (root == null || p == null || q == null) {
             return null;
-        int min=Math.min(p.val,q.val);
-        int max=Math.max(p.val,q.val);
-        if(min<=root.val && root.val<=max){
-            return root;
         }
-        if(min<root.val)
-            return lowestCommonAncestor(root.left,p,q);
-        else return lowestCommonAncestor(root.right,p,q);
+
+        // Both nodes in left subtree
+        if (p.val < root.val && q.val < root.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+
+        // Both nodes in right subtree
+        if (p.val > root.val && q.val > root.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+
+        // Split point, current root is LCA
+        return root;
     }
 }
