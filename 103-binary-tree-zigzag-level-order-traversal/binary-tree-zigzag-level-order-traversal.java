@@ -24,27 +24,18 @@ class Solution {
         while(!queue.isEmpty()){
             int n=queue.size();
             List<Integer>list=new ArrayList<>();
-            if(isEven){
-                for(int i=0;i<n;i++){
-                    TreeNode x=queue.get(0);
-                    list.add(x.val);
-                    if(x.left!=null)queue.add(x.left);
-                    if(x.right!=null)queue.add(x.right);
-                    queue.remove(0);
-                }
-            }
-            else{
+            if(!isEven){
                 for(int i=n-1;i>=0;i--){
                     list.add(queue.get(i).val);
                 }
-                 
-                  for(int i=0;i<n;i++){
+            }
+            for(int i=0;i<n;i++){
                     TreeNode x=queue.get(0);
+                    if(isEven)list.add(x.val);
                     if(x.left!=null)queue.add(x.left);
                     if(x.right!=null)queue.add(x.right);
                     queue.remove(0);
                 }
-            }
             isEven=!isEven;
             res.add(list);
             
