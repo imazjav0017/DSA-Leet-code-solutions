@@ -24,9 +24,8 @@ class Solution {
         switch(root.val){
             case 2:
                 return left || right;
-            case 3:
+            default:
                 return left && right;
         }
-        return left && right;
     }
 }
