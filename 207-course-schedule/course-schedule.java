@@ -18,6 +18,7 @@ class Solution {
                 else completed[p1]=true;
             }
         }
+        completed[c]=true;
         return true;
     }
     public boolean canFinish(int numCourses, int[][] prerequisites) {
@@ -37,8 +38,7 @@ class Solution {
         boolean[]completed=new boolean[numCourses];
         for(int i=0;i<numCourses;i++){
             if(!visited[i]){
-                completed[i]=dfs(adj,i,visited,completed,numCourses);
-                if(completed[i]==false)
+                if(dfs(adj,i,visited,completed,numCourses)==false)
                     return false;
             }
         }
