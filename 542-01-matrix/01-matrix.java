@@ -1,48 +1,35 @@
-// nearest ---- BFS
-//but bfs from each 1 to nearest 0 would be too much complexity
-// rather to bfs from 0 to 1
 class Solution {
-    static int m, n;
-
     public int[][] updateMatrix(int[][] mat) {
-        m = mat.length;
-        n = mat[0].length;
+        if (mat == null || mat.length == 0 || mat[0].length == 0)
+            return new int[0][0];
 
-        int[][] ans = new int[m][n];
-        boolean[][] vis = new boolean[m][n];
-        Queue<int[]> q = new LinkedList<>();
-
-        // Step 1: Push all 0s into queue
+        int m = mat.length, n = mat[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        int MAX_VALUE = m * n;
+        
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (mat[i][j] == 0) {
-                    q.add(new int[]{i, j});
-                    vis[i][j] = true;
+                    queue.offer(new int[]{i, j});
+                } else {
+                    mat[i][j] = MAX_VALUE;
                 }
             }
         }
-
-        int[] dr = {-1, 0, 1, 0};
-        int[] dc = {0, 1, 0, -1};
-
-        // Step 2: BFS
-        while (!q.isEmpty()) {
-            int[] curr = q.poll();
-            int r = curr[0];
-            int c = curr[1];
-
-            for (int d = 0; d < 4; d++) {
-                int nr = r + dr[d];
-                int nc = c + dc[d];
-
-                if (nr >= 0 && nc >= 0 && nr < m && nc < n && !vis[nr][nc]) {
-                    ans[nr][nc] = ans[r][c] + 1;
-                    vis[nr][nc] = true;
-                    q.add(new int[]{nr, nc});
+        
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        
+        while (!queue.isEmpty()) {
+            int[] cell = queue.poll();
+            for (int[] dir : directions) {
+                int r = cell[0] + dir[0], c = cell[1] + dir[1];
+                if (r >= 0 && r < m && c >= 0 && c < n && mat[r][c] > mat[cell[0]][cell[1]] + 1) {
+                    queue.offer(new int[]{r, c});
+                    mat[r][c] = mat[cell[0]][cell[1]] + 1;
                 }
             }
         }
-
-        return ans;
+        
+        return mat;
     }
 }
