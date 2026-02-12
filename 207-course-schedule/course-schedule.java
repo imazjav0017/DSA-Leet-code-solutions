@@ -3,14 +3,12 @@ class Solution {
     boolean[]completed,int n){
         List<Integer>p=adj.get(c);
         visited[c]=true;
-        System.out.println(c+"____________");
         if(p.size()==0)
         {
             completed[c]=true;
             return true;
         }
         for(int p1:p){
-            System.out.println("V:"+p1+"--"+visited[p1]+"--"+completed[p1]);
             if(visited[p1] &&!completed[p1])
                 return false;
             else if(!visited[p1]){
@@ -40,7 +38,6 @@ class Solution {
         for(int i=0;i<numCourses;i++){
             if(!visited[i]){
                 completed[i]=dfs(adj,i,visited,completed,numCourses);
-                System.out.println("I:"+i+" v="+completed[i]);
                 if(completed[i]==false)
                     return false;
             }
