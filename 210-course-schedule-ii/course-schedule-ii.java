@@ -30,7 +30,6 @@ class Solution {
         return true;
     }
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        int n=prerequisites.length;
         Map<Integer,List<Integer>>adj=new HashMap<>();
         for(int[]pr:prerequisites){
             int i=pr[0],j=pr[1];
