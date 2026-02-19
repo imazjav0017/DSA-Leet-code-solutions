@@ -1,34 +1,27 @@
 class Solution {
-    private boolean dfs(int r, int c, int[][]grid1,int[][]grid2,boolean[][]visited){
-        visited[r][c]=true;
-        int[][]dirs={{0,1},{0,-1},{1,0},{-1,0}};
-        boolean isEqual=true;
-        for(int[]d:dirs){
-            int nr=r+d[0],nc=c+d[1];
-            if(nr<0||nc<0||nr>=grid1.length||nc>=grid1[0].length|| visited[nr][nc]||grid2[nr][nc]==0)
-                continue;
-            boolean res= dfs(nr,nc,grid1,grid2,visited);
-            if(isEqual){
-                isEqual=res;
-            }
-        }
-        if(grid1[r][c]!=grid2[r][c])
-            return false;
-        return isEqual;
+    private boolean isSubIsland(int[][] grid1, int[][] grid2, int x, int y) {
+        if (x < 0 || x >= grid2[0].length || y < 0 || y >= grid2.length) return true;
+        if (grid2[y][x] == 0) return true;
+        grid2[y][x] = 0;
+        boolean isLandOnGrid1 = grid1[y][x] == 1;
+        boolean left = isSubIsland(grid1, grid2, x - 1, y);
+        boolean right = isSubIsland(grid1, grid2, x + 1, y);
+        boolean bottom = isSubIsland(grid1, grid2, x, y + 1);
+        boolean top = isSubIsland(grid1, grid2, x, y - 1);
+        return isLandOnGrid1 && left && right && bottom && top;
     }
+
     public int countSubIslands(int[][] grid1, int[][] grid2) {
-        int m=grid1.length,n=grid1[0].length;
-        boolean[][]visited=new boolean[m][n];
-        int res=0;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(!visited[i][j] && grid2[i][j]==1){
-                   boolean isEqual= dfs(i,j,grid1,grid2,visited);
-                   if(isEqual)
-                    res++;
+        int width = grid1[0].length;
+        int height = grid1.length;
+        int ans = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (grid2[y][x] == 1) {
+                    if (isSubIsland(grid1, grid2, x, y)) ans++;
                 }
             }
         }
-        return res;
+        return ans;
     }
 }
