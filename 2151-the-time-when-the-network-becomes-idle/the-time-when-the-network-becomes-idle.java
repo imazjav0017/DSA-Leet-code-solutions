@@ -1,50 +1,43 @@
 class Solution {
-    private int getLastSend(int d, int p) {
-        if (p >= 2 * d) {
-            return 0;
-        }
-        if ((2 * d) % p == 0) {
-            return 2 * d - p;
-        }
-        return 2 * d - (2 * d) % p;
-    }
-
     public int networkBecomesIdle(int[][] edges, int[] patience) {
-        // Build adjacency list.
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i < patience.length; i++) {
-            graph.add(new ArrayList<>());
+        int n = patience.length;
+        
+        // Build adjacency list
+        ArrayList<Integer>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
         }
         for (int[] edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
-            graph.get(u).add(v);
-            graph.get(v).add(u);
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
         }
 
-        // Perform BFS to find the min distance of each node from the root.
-        int[] distance = new int[patience.length];
-        boolean[] visited = new boolean[patience.length];
-        visited[0] = true;
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(0);
-        while (!queue.isEmpty()) {
-            int node = queue.remove();
-            for (int neighbor : graph.get(node)) {
-                if (!visited[neighbor]) {
-                    distance[neighbor] = 1 + distance[node];
-                    queue.add(neighbor);
-                    visited[neighbor] = true;
+        // BFS to find shortest distance from 0
+        int[] dist = new int[n];
+        Arrays.fill(dist, -1);
+        Queue<Integer> q = new LinkedList<>();
+        q.add(0);
+        dist[0] = 0;
+
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            for (int v : graph[u]) {
+                if (dist[v] == -1) {
+                    dist[v] = dist[u] + 1;
+                    q.add(v);
                 }
             }
         }
 
-        int maxTime = 0;
-        for (int n = 1; n < patience.length; n++) {
-            int lastSend = getLastSend(distance[n], patience[n]);
-            int lastReceive = lastSend + 2 * distance[n];
-            maxTime = Math.max(maxTime, lastReceive);
+        // Calculate idle time
+        int ans = 0;
+        for (int i = 1; i < n; i++) {
+            int roundTrip = 2 * dist[i];
+            int lastSend = ((roundTrip - 1) / patience[i]) * patience[i];
+            int idleTime = lastSend + roundTrip;
+            ans = Math.max(ans, idleTime);
         }
-        return maxTime + 1;
+
+        return ans + 1;
     }
 }
