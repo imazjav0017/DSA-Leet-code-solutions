@@ -1,14 +1,14 @@
 class Solution {
-   public boolean checkValid(int[][] matrix) {
-			int rowsLength = matrix.length;
-			int colsLength = matrix[0].length;
-			HashSet<String> elements = new HashSet<>();
-			for(int i=0;i<rowsLength;i++){
-				for(int j=0;j<colsLength;j++){
-					if(!elements.add("Row"+i+"ele"+matrix[i][j]) || !elements.add("Col"+j+"ele"+matrix[i][j]))
-						return false;
-				}
-			}
-			return true;
+      public boolean checkValid(int[][] matrix) {
+        for (int r = 0, n = matrix.length; r < n; ++r) {
+            Set<Integer> row = new HashSet<>();
+            Set<Integer> col = new HashSet<>();
+            for (int c = 0; c < n; ++c) {
+                if (!row.add(matrix[r][c]) || !col.add(matrix[c][r])) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
