@@ -1,23 +1,17 @@
 class Solution {
     public int[] sortedSquares(int[] nums) {
         int n=nums.length;
-        int p1=0;
-        int p2=n-1;
         int[]res=new int[n];
-        int pos=n-1;
-        while(p1<=p2){
-            int n1=nums[p1],n2=nums[p2];
-            if(n1<0){
-                n1=-1*n1;
+        int i=0,j=n-1;
+        for(int x=n-1;x>=0;x--){
+            if(Math.abs(nums[i])>Math.abs(nums[j])){
+                res[x]=nums[i]*nums[i];
+                i++;
             }
-            if(n2<0){
-                n2=-1*n2;
+            else{
+                res[x]=nums[j]*nums[j];
+                j--;
             }
-            int max=Math.max(n1,n2);
-            res[pos]=max*max;
-            pos--;
-            if(max==n1)p1++;
-            else p2--;
         }
         return res;
     }
