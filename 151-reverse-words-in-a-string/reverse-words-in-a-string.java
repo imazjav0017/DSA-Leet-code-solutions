@@ -1,58 +1,96 @@
 class Solution {
     public String reverseWords(String s) {
-        StringBuilder sb=new StringBuilder(s);
-        int i=0;
-        while(sb.charAt(i)==' '){
-            i++;
+        // approach 1
+        // String[] words = s.split(" +");
+        // StringBuilder str = new StringBuilder();
+        // for(int i = words.length-1; i >= 0; i--){
+        //     str.append(words[i]);
+        //     str.append(" ");
+        // }
+        // return str.toString().trim();
+
+        // approach 2
+        // String st = s.trim();
+        // String[] str = st.split("\\s+");
+        // int i = 0;
+        // int j = str.length - 1;
+        // while(i < j){
+        //     String temp = str[i];
+        //     str[i] = str[j];
+        //     str[j] = temp;
+        //     i++;
+        //     j--;
+        // }
+        // return String.join(" ", str);
+
+        // Approach 3
+        //here s = "  hello world   "
+        int left = 0;
+        int right = s.length() - 1;
+        while(left < s.length()){
+            if(s.charAt(left) == ' '){
+                left++;
+            }
+            else break;
         }
-        if(i>0){
-            sb.delete(0,i);
+
+        while(right >= 0){
+            if(s.charAt(right) == ' '){
+                right--;
+            }
+            else break;
         }
-        int n=sb.length();
-        i=n-1;
-        while (sb.charAt(i)==' '){
-            i--;
-        }
-        if(i<n-1){
-            sb.delete(i+1,n);
-        }
-        n=sb.length();
-        for(int j=0;j<n;j++){
-            if(sb.charAt(j)==' '){
-                int end=j+1;
-                while(sb.charAt(end)==' ')end++;
-                if(end!=j+1){
-                    sb.delete(j+1,end);
-                    n=sb.length();
+
+        StringBuilder sb =  new StringBuilder();
+
+        while(left <= right){
+            if(s.charAt(left) != ' '){
+                sb.append(s.charAt(left));
+                left++;
+            }
+            else if(s.charAt(left) == ' '){
+                if(sb.charAt(sb.length()-1) != ' '){
+                    sb.append(' ');
+                    left++;
+                }
+                else{
+                    left++;
                 }
             }
         }
-        n=sb.length();
-        int left=0,right=n-1;
-        while(left<right){
-            char temp = sb.charAt(left);
-            sb.setCharAt(left, sb.charAt(right));
-            sb.setCharAt(right, temp);
-            left++;
-            right--;
+        // here sb = "hello world"
+        // now reverse
+        int i =0,
+        j = sb.length() - 1;
+        while(i<j){
+            char temp = sb.charAt(i);
+            sb.setCharAt(i , sb.charAt(j));
+            sb.setCharAt(j,temp);
+            i++;
+            j--;
         }
-        for(int j=0;j<n;){
-            int l=j,r=l;
-            while(r<n && sb.charAt(r)!=' '){ r++;}
-            r--;
-            j=r;
-            System.out.println(n+":"+l+":"+r);
-            while(l<r){
-                char temp = sb.charAt(l);
-                sb.setCharAt(l, sb.charAt(r));
-                sb.setCharAt(r, temp);
-                l++;
-                r--;
-            }
-            j+=2;
-        }
-        // System.out.println(sb.toString());
-        return sb.toString();
+        //here sb = "dlrow olleh"
+        // new reverse each word
+        int start = 0,
+            end = 0;
 
+        while(start < sb.length()){
+            while(end < sb.length() && sb.charAt(end) != ' '){
+                end++;
+            }
+            int p1 = start,
+                p2 = end - 1;
+            
+            while(p1 < p2){
+                char temp = sb.charAt(p1);
+                sb.setCharAt(p1 , sb.charAt(p2));
+                sb.setCharAt(p2, temp);
+                p1++;
+                p2--;
+            }
+            start = end +1;
+            end = start;
+        }
+        return sb.toString(); // finally it return "world hello"
     }
 }
