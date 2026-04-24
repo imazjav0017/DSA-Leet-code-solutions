@@ -6,7 +6,7 @@ class Solution {
         int count=1;
         while(r<=n){
             if(r==n||chars[r]!=cc){
-                System.out.println(r+" :"+w+": "+cc);
+                //System.out.println(r+" :"+w+": "+cc);
                 chars[w]=cc;
                 w++;
                 if(count>1){
