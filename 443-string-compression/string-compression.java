@@ -1,32 +1,31 @@
 class Solution {
     public int compress(char[] chars) {
         int n=chars.length;
-        int i=0;
-        int insertAt=0;
-        while(i<n){
-            chars[insertAt]=chars[i];
-            insertAt++;
-            int j=i+1;
-            while(j<n && chars[j]==chars[i]) {
-                j++;
-            }
-            if(j-i>1){
-                int num=j-i;
-                int count=0;
-                int length=j-i;
-                while(num>0){
-                 num/=10;
-                 count++;
+        int r=1,w=0;
+        char cc=chars[0];
+        int count=1;
+        while(r<=n){
+            if(r==n||chars[r]!=cc){
+                System.out.println(r+" :"+w+": "+cc);
+                chars[w]=cc;
+                w++;
+                if(count>1){
+                String s=String.valueOf(count);
+                for(int i=0;i<s.length();i++){
+                    chars[w]=s.charAt(i);
+                    w++;
                 }
-                for(int k=0;k<count;k++){
-                    chars[insertAt]=Integer.toString(length).charAt(k);
-                    insertAt++;
                 }
-                
+                if(r!=n){
+                    cc=chars[r];
+                    count=1;
+                }
             }
-            i=j;
+            else{
+                count++;
+            }
+            r++;
         }
-        //System.out.println(Arrays.toString(chars));
-        return insertAt;
+        return w;
     }
 }
