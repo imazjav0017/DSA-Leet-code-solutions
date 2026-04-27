@@ -17,10 +17,11 @@ class Solution {
             else{
                 while(left<right && set.contains(c)){
                     char cl=s.charAt(left);
-                    //System.out.println(cl);
                     set.remove(cl);
                     left++;
                 }
+                set.add(c);
+                right++;
             }
         }
         return maxLen;
