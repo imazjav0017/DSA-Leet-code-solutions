@@ -1,39 +1,33 @@
 class Solution {
     public int longestSubarray(int[] nums, int limit) {
-        Deque<Integer> maxDeque = new ArrayDeque<>(); // decreasing
-        Deque<Integer> minDeque = new ArrayDeque<>(); // increasing
-
-        int left = 0;
-        int maxLen = 0;
-
-        for (int right = 0; right < nums.length; right++) {
-            int num = nums[right];
-
-            while (!maxDeque.isEmpty() && maxDeque.peekLast() < num) {
-                maxDeque.pollLast();
-            }
-            maxDeque.offerLast(num);
-
-            while (!minDeque.isEmpty() && minDeque.peekLast() > num) {
-                minDeque.pollLast();
-            }
-            minDeque.offerLast(num);
-
-            while (maxDeque.peekFirst() - minDeque.peekFirst() > limit) {
-                if (nums[left] == maxDeque.peekFirst()) {
-                    maxDeque.pollFirst();
-                }
-
-                if (nums[left] == minDeque.peekFirst()) {
-                    minDeque.pollFirst();
-                }
-
-                left++;
-            }
-
-            maxLen = Math.max(maxLen, right - left + 1);
+       int n=nums.length;
+       Deque<Integer>maxDequeue=new ArrayDeque<>();
+       Deque<Integer>minDequeue=new ArrayDeque<>();
+       int left=0,right=0;
+       int maxLen=0;
+       while(right<n){
+        int num=nums[right];
+        while(!maxDequeue.isEmpty() && maxDequeue.peekLast()<num){
+            maxDequeue.pollLast();
         }
-
-        return maxLen;
+        maxDequeue.offerLast(num);
+        while(!minDequeue.isEmpty() && minDequeue.peekLast()>num){
+            minDequeue.pollLast();
+        }
+        minDequeue.offerLast(num);
+        while(maxDequeue.peekFirst()-minDequeue.peekFirst()>limit){
+            if(nums[left]==maxDequeue.peekFirst()){
+                maxDequeue.pollFirst();
+            }
+             if(nums[left]==minDequeue.peekFirst()){
+                minDequeue.pollFirst();
+            }
+            left++;
+        }
+        int len=right-left+1;
+        maxLen=Math.max(len,maxLen);
+        right++;
+       }
+       return maxLen;
     }
 }
