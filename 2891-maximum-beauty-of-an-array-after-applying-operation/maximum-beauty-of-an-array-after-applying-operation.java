@@ -7,8 +7,8 @@ class Solution {
         int left=0,right=0;
         int maxLen=0;
         while(right<n){
-            low=nums[right]-k;
-            while(low>high){
+            int tempLow=nums[right]-k;
+            while(tempLow>high){
                 left++;
                 low=nums[left]-k;
                 high=nums[left]+k;
