@@ -24,8 +24,10 @@ class Solution {
                 }
                 left++;
             }
-            
-            total+= right - left + 1;;
+            long len=(long)right-left+1;
+            long sum=(len*(len+1))/2;
+            long prevSum=((len-1) * len)/2;
+            total+=sum-prevSum;
             right++;
         }
         return total;
