@@ -1,36 +1,57 @@
 class Solution {
+    boolean valid(Map<Character,Integer>source,Map<Character,Integer>target){
+        for(char c:target.keySet()){
+            int count1=target.get(c);
+            int count2=source.getOrDefault(c,0);
+            //System.out.println("C:"+c+" C1: "+count1+" C2: "+count2);
+            if(count1>count2)
+                return false;
+        }
+        return true;
+    }
     public String minWindow(String s, String t) {
-        int n = s.length(), m = t.length();
-        if(m > n) return "";
-        int []hash = new int[128]; // to store chars freq
-        int left = 0, minLen = Integer.MAX_VALUE, sIndex = -1;
-        int count = 0;
-
-        for(int i=0; i<m; i++) hash[t.charAt(i)]++;
-
-        for(int right = 0; right < n; right++) {
-            //check if char is preinserted 
-            char ch = s.charAt(right);
-            if(hash[ch] > 0) {
-                count++;
+        int m=s.length();
+        int n=t.length();
+        if(m<n)
+            return "";
+        Map<Character,Integer>targetMap=new HashMap<>();
+        for(int i=0;i<n;i++){
+            char c=t.charAt(i);
+            int count=targetMap.getOrDefault(c,0);
+            targetMap.put(c,count+1);
+        }
+        int[]res=new int[2];
+        int minLen=m+1;
+        int left=0,right=0;
+        Map<Character,Integer>sourceMap=new HashMap<>();
+        // for(char c:targetMap.keySet()){
+        //     System.out.println(c+" : "+targetMap.get(c));
+        // }
+        while(right<m){
+            char c=s.charAt(right);
+           //System.out.println("c:"+c);
+            if(targetMap.getOrDefault(c,0)!=0){
+                sourceMap.put(c,sourceMap.getOrDefault(c,0)+1);
+                //  for(char c1:sourceMap.keySet()){
+                //     System.out.println(c1+" : "+sourceMap.get(c1));
+                //     }
             }
-            hash[ch]--;
-
-            // all t's char exists in s
-            while(count == m) {
-                // possible ans
-                if(right - left + 1 < minLen) {
-                    minLen = right - left + 1;
-                    sIndex = left;
+            //System.out.println("Check: "+s.substring(left,right+1));
+            while(valid(sourceMap,targetMap)){
+                int len=right-left+1;
+                //System.out.println("Check Pass: "+s.substring(left,right+1));
+                minLen=Math.min(minLen,len);
+                if(minLen==len){
+                    res[0]=left;
+                    res[1]=right;
                 }
-
-                // try shrinking
-                char leftCh = s.charAt(left);
-                hash[leftCh]++;
-                if(hash[leftCh] > 0) count--; // if char freq becomes +ve means it doesnot exists
+                char cl=s.charAt(left);
+                if(targetMap.containsKey(cl))
+                    sourceMap.put(cl,sourceMap.get(cl)-1);
                 left++;
             }
+            right++;
         }
-        return sIndex == -1 ? "" : s.substring(sIndex, sIndex + minLen);
+        return minLen<=m?s.substring(res[0],res[1]+1):"";
     }
 }
