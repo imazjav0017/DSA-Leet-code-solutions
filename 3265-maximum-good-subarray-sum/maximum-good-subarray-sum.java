@@ -4,8 +4,14 @@ class Solution {
         Map<Integer,Long>prefixMap=new HashMap<>();
         long prefix=0;
         for(int i:nums){
-            //Step 1: check if i-k or i+k exists
-            //Step 2: if not : 
+            //Step 1: check if i-k
+            //Step 2: check if i+k exists, both can exist, then i+k will give bigger sum.
+            //step 3: if neither exists, then insert the current prefixvalue
+            //however current i can exist already, so insert smallest prefix value as we do: 
+            //prefix+i-Mapvalue , so we want mapValue to be smallest if duplicates exist.
+            //if a match is found then we do current Prefix + current value (i) - prefix till the start
+            //index we found
+
             if(prefixMap.containsKey(i-k)){
                 sum=Math.max(sum,(prefix+i-prefixMap.get(i-k)));
             }
