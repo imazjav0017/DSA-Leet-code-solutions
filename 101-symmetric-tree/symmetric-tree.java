@@ -14,14 +14,19 @@
  * }
  */
 class Solution {
-    public boolean dfs(TreeNode p, TreeNode q){
-        if(p==null && q==null)
+    boolean check(TreeNode root1, TreeNode root2){
+        if(root1==null && root2==null)
             return true;
-        if(p==null ||q==null)
+        if(root1==null || root2== null)
             return false;
-        return p.val==q.val && dfs(p.left,q.right) && dfs(p.right,q.left);
+        if(root1.val==root2.val){
+            return check(root1.left,root2.right) && check(root1.right,root2.left);
+        }
+        else{
+            return false;
+        }
     }
-    public boolean isSymmetric(TreeNode root){
-        return dfs(root.left,root.right);
+    public boolean isSymmetric(TreeNode root) {
+        return check(root,root);
     }
 }
