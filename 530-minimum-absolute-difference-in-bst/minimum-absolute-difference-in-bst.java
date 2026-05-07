@@ -14,18 +14,20 @@
  * }
  */
 class Solution {
-    TreeNode prev=null;
-    int res=Integer.MAX_VALUE;
-    public int getMinimumDifference(TreeNode root) {
+    int minDiff=Integer.MAX_VALUE;
+    Integer prev=null;
+    void inorder(TreeNode root){
         if(root==null)
-            return Integer.MAX_VALUE;
-        getMinimumDifference(root.left);
-        if(prev!=null){
-            res=Math.min(res,Math.abs(prev.val-root.val));
+            return;
+        inorder(root.left);
+        if(prev!=null && Math.abs(root.val-prev)<minDiff){
+            minDiff=Math.abs(root.val-prev);
         }
-        prev=root;
-        getMinimumDifference(root.right);
-        return res;
-        
+        prev=root.val;
+        inorder(root.right);
+    }
+    public int getMinimumDifference(TreeNode root) {
+        inorder(root);
+        return minDiff;
     }
 }
