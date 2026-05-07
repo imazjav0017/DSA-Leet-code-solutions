@@ -21,8 +21,12 @@ class Solution {
             return;
         inorder(root.left,k);
         count++;
-        if(count==k)
+        if(count==k){
             smallest= root.val;
+            return;
+        }
+        if(count>=k)
+            return;
         inorder(root.right,k);
     }
     public int kthSmallest(TreeNode root, int k) {
