@@ -1,43 +1,31 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
-    String minString="";
-    String smallest(TreeNode root,String s){
-        if(root==null)
-            return "";
-        char c=(char)('a'+root.val);
-        s+=c;
-        //System.out.println("root: "+c);
-        if(root.left==null && root.right==null)
-        {
-            String rev=new StringBuilder(s).reverse().toString();
-            //System.out.println(rev+" M: "+minString);
-            if(minString.isEmpty()){
-                minString=rev;
-            }else{
-                minString=rev.compareTo(minString)<0?rev:minString;
+    String ans = null;
+
+    public String smallestFromLeaf(TreeNode root) {
+        dfs(root, new StringBuilder());
+        return ans;
+    }
+
+    private void dfs(TreeNode node, StringBuilder path) {
+        if (node == null) return;
+
+        char c = (char) ('a' + node.val);
+
+        // Insert at front because we need leaf -> root
+        path.insert(0, c);
+
+        if (node.left == null && node.right == null) {
+            String curr = path.toString();
+
+            if (ans == null || curr.compareTo(ans) < 0) {
+                ans = curr;
             }
         }
-        else{
-            smallest(root.left,s);
-            smallest(root.right,s);
-        }
-        return minString;
-    }
-    public String smallestFromLeaf(TreeNode root) {
-        return smallest(root,"");
+
+        dfs(node.left, path);
+        dfs(node.right, path);
+
+        // Backtrack
+        path.deleteCharAt(0);
     }
 }
