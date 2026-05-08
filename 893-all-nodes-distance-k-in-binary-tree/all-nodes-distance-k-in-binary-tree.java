@@ -48,11 +48,11 @@ class Solution {
                 }
             } 
              c++;
-                System.out.println(c);
-                for(TreeNode node:q){
-                    System.out.print(node.val+" ; ");
-                }
-                System.out.println("________");
+                // System.out.println(c);
+                // for(TreeNode node:q){
+                //     System.out.print(node.val+" ; ");
+                // }
+                // System.out.println("________");
                 if(c==k)
                     break;
         }
