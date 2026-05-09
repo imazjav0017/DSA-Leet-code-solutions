@@ -1,45 +1,31 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>>res=new ArrayList<>();
-        List<TreeNode>queue=new ArrayList<>();
-        if(root==null)
-            return res;
-        queue.add(root);
-        boolean isEven=true;
-        while(!queue.isEmpty()){
-            int n=queue.size();
-            List<Integer>list=new ArrayList<>();
-            if(!isEven){
-                for(int i=n-1;i>=0;i--){
-                    list.add(queue.get(i).val);
-                }
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+
+        Queue<TreeNode> q = new ArrayDeque<>();
+        q.offer(root);
+
+        boolean leftToRight = true;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            Integer[] level = new Integer[size];
+
+            for (int i = 0; i < size; i++) {
+                TreeNode node = q.poll();
+
+                int index = leftToRight ? i : size - 1 - i;
+                level[index] = node.val;
+
+                if (node.left != null) q.offer(node.left);
+                if (node.right != null) q.offer(node.right);
             }
-            for(int i=0;i<n;i++){
-                    TreeNode x=queue.get(0);
-                    if(isEven)list.add(x.val);
-                    if(x.left!=null)queue.add(x.left);
-                    if(x.right!=null)queue.add(x.right);
-                    queue.remove(0);
-                }
-            isEven=!isEven;
-            res.add(list);
-            
+
+            res.add(Arrays.asList(level));
+            leftToRight = !leftToRight;
         }
+
         return res;
     }
 }
