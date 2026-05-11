@@ -16,22 +16,20 @@
 class Solution {
     List<TreeNode>res=new ArrayList<>();
     Map<String,Integer>count=new HashMap<>();
-    String serialize(TreeNode root,StringBuilder build){
+    String serialize(TreeNode root){
         if(root==null){
-            build.append("#,");
-            return build.toString();
+            return "#,";
         }
-        String left=serialize(root.left,new StringBuilder());
-        String right=serialize(root.right,new StringBuilder());
-        build.append("@"+root.val+",").append(left).append(right);
-        String ans=build.toString();
+        String left=serialize(root.left);
+        String right=serialize(root.right);
+        String ans="@"+root.val+left+right;
         count.put(ans,count.getOrDefault(ans,0)+1);
         if(count.get(ans)==2)
             res.add(root);
         return ans;
     }
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
-        serialize(root,new StringBuilder());
+        serialize(root);
         return res;
     }
 }
