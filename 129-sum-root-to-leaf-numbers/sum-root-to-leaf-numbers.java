@@ -14,21 +14,15 @@
  * }
  */
 class Solution {
-    int sum=0;
-    void fill(TreeNode root,String s){
+    int dfs(TreeNode root,int curr){
         if(root==null)
-            return;
-        s+=root.val;
-        if(root.left==null && root.right==null){
-            //System.out.println(s);
-            int num=Integer.parseInt(s);
-            sum+=num;
-        }
-        fill(root.left,s);
-        fill(root.right,s);
+            return 0;
+        curr=curr*10+root.val;
+        if(root.left==null && root.right==null)
+            return curr;
+        return dfs(root.left,curr)+dfs(root.right,curr);
     }
     public int sumNumbers(TreeNode root) {
-        fill(root,"");
-        return sum;
+        return dfs(root,0);
     }
 }
