@@ -14,26 +14,15 @@
  * }
  */
 class Solution {
-    int sum(TreeNode root,int k){
-        if(root.left==null &&root.right==null){
-            return root.val;
-        }
-        if(root.left!=null){
-            int ls=root.val+sum(root.left,k-root.val);
-            if(ls==k)
-                return k;
-        }
-        if(root.right!=null){
-            int rs=root.val+sum(root.right,k-root.val);
-            if(rs==k)
-                return k;
-        }
-         return -10001;
+    boolean dfs(TreeNode root,int target){
+        if(root==null)
+            return false;
+        target-=root.val;
+        if(root.left==null && root.right==null)
+            return target==0;
+        return dfs(root.left,target)||dfs(root.right,target);
     }
     public boolean hasPathSum(TreeNode root, int targetSum) {
-        if(root==null) return false;
-        int s=sum(root,targetSum);
-        // System.out.println(s);
-        return s==targetSum;
+        return dfs(root,targetSum);
     }
 }
