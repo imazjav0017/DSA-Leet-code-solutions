@@ -3,7 +3,6 @@ class Solution {
         if(root==-1)
             return 0;
         int maxTime=0;
-        //System.out.println(root+": IT :"+informTime[root]);
         if(map.containsKey(root)){
             for(int i:map.get(root)){
                 maxTime=Math.max(maxTime,dfs(i,map,informTime));
@@ -22,14 +21,6 @@ class Solution {
             list.add(i);
             map.put(manager[i],list);
         }
-        //  for(int i: map.keySet()){
-        //     List<Integer>l=map.get(i);
-        //     System.out.println(i+":");
-        //     for(int x:l){
-        //         System.out.print(x+",");
-        //     }
-        //     System.out.println("");
-        // }
         return dfs(headID,map,informTime);
     }
 }
