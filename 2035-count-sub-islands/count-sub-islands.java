@@ -9,7 +9,7 @@ class Solution {
                 continue;
             if(visited[nr][nc]||grid2[nr][nc]==0)
                 continue;
-            isSubIsland=dfs(grid1,grid2,m,n,nr,nc,visited)&&(grid1[nr][nc]==1) && isSubIsland;
+            isSubIsland=dfs(grid1,grid2,m,n,nr,nc,visited) && isSubIsland;
         }
         return isSubIsland;
     }
