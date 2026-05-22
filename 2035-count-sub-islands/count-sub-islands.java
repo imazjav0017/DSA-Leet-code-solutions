@@ -1,27 +1,33 @@
 class Solution {
-    private boolean isSubIsland(int[][] grid1, int[][] grid2, int x, int y) {
-        if (x < 0 || x >= grid2[0].length || y < 0 || y >= grid2.length) return true;
-        if (grid2[y][x] == 0) return true;
-        grid2[y][x] = 0;
-        boolean isLandOnGrid1 = grid1[y][x] == 1;
-        boolean left = isSubIsland(grid1, grid2, x - 1, y);
-        boolean right = isSubIsland(grid1, grid2, x + 1, y);
-        boolean bottom = isSubIsland(grid1, grid2, x, y + 1);
-        boolean top = isSubIsland(grid1, grid2, x, y - 1);
-        return isLandOnGrid1 && left && right && bottom && top;
+    int[][]dirs={{0,1},{0,-1},{1,0},{-1,0}};
+    boolean dfs(int[][]grid1,int[][]grid2,int m, int n,int row,int col, boolean[][]visited){
+        visited[row][col]=true;
+        boolean isSubIsland=grid1[row][col]==1;
+        for(int[]d:dirs){
+            int nr=row+d[0],nc=col+d[1];
+            if(nr<0||nr>=m||nc<0||nc>=n)
+                continue;
+            if(visited[nr][nc]||grid2[nr][nc]==0)
+                continue;
+            isSubIsland=dfs(grid1,grid2,m,n,nr,nc,visited)&&(grid1[nr][nc]==1) && isSubIsland;
+        }
+        return isSubIsland;
     }
-
     public int countSubIslands(int[][] grid1, int[][] grid2) {
-        int width = grid1[0].length;
-        int height = grid1.length;
-        int ans = 0;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (grid2[y][x] == 1) {
-                    if (isSubIsland(grid1, grid2, x, y)) ans++;
+        int m=grid1.length,n=grid1[0].length;
+        boolean[][]visited=new boolean[m][n];
+        int count=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid2[i][j]==1 && !visited[i][j]){
+                    if(dfs(grid1,grid2,m,n,i,j,visited)){
+                        count++;
+                    }
                 }
             }
         }
-        return ans;
+        return count;
+
+
     }
 }
