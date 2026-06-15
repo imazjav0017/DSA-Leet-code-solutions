@@ -1,33 +1,35 @@
 class Solution {
-    public void bfs(int [][] isConnected , int src, boolean[] isVisited){
-        Queue<Integer> queue = new LinkedList<>();
-        queue.offer(src);
-        isVisited[src] = true;
-        
-        while(!queue.isEmpty()){
-            int current = queue.poll();
-
-            for(int i = 0; i < isConnected.length; i++){
-                if(isConnected[current][i] == 1 && !isVisited[i]){
-                    queue.offer(i);
-                    isVisited[i] = true;
-                }
+    void dfs(int node, List<Integer>[]graph,boolean[]visited){
+        visited[node]=true;
+        for(int child:graph[node]){
+            if(!visited[child]){
+                dfs(child,graph,visited);
             }
         }
     }
-    
-
     public int findCircleNum(int[][] isConnected) {
-        int n = isConnected.length;
-        boolean[] isVisited = new boolean[n];
-        int Provinces = 0;
-
-        for(int i = 0; i < n; i++){
-            if(!isVisited[i]){
-                Provinces++;              
-                bfs(isConnected, i, isVisited);
+        int n=isConnected.length;
+        List<Integer>[]graph=new ArrayList[n];
+        for(int i=0;i<n;i++){
+            graph[i]=new ArrayList<>();
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i==j)
+                    continue;
+                if(isConnected[i][j]==1){
+                    graph[i].add(j);
+                }
             }
         }
-        return Provinces;
+        boolean[]visited=new boolean[n];
+        int count=0;
+        for(int i=0;i<n;i++){
+            if(!visited[i]){
+                count++;
+                dfs(i,graph,visited);
+            }
+        }
+        return count;
     }
 }
