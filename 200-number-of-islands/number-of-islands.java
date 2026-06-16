@@ -1,26 +1,27 @@
 class Solution {
-    public void dfs(char[][]grid,boolean[][]v,int r,int c,int rows,int cols){
-        if(r<0||c<0||r>=rows||c>=cols||grid[r][c]=='0'||v[r][c])
-            return;
-        v[r][c]=true;
-        dfs(grid,v,r+1,c,rows,cols);
-        dfs(grid,v,r-1,c,rows,cols);
-        dfs(grid,v,r,c+1,rows,cols);
-        dfs(grid,v,r,c-1,rows,cols);
-        return;
+    int[][]dirs={{0,1},{0,-1},{1,0},{-1,0}};
+    void dfs(int row, int col, char[][]grid, int m, int n, boolean[][]visited){
+        visited[row][col]=true;
+        for(int[]dir:dirs){
+            int nr=row+dir[0],nc=col+dir[1];
+            if(nr<0||nc<0||nr>=m||nc>=n||grid[nr][nc]=='0')
+                continue;
+            if(!visited[nr][nc])
+                dfs(nr,nc,grid,m,n,visited);
+        }
     }
     public int numIslands(char[][] grid) {
-        int rows=grid.length,cols=grid[0].length;
-        int res=0;
-        boolean[][]v=new boolean[rows][cols];
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<cols;j++){
-                if(!v[i][j] && grid[i][j]=='1'){
-                    res+=1;
-                    dfs(grid,v,i,j,rows,cols);
+        int m=grid.length,n=grid[0].length;
+        int count=0;
+        boolean[][]visited=new boolean[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(!visited[i][j] && grid[i][j]=='1'){
+                    count++;
+                    dfs(i,j,grid,m,n,visited);
                 }
             }
         }
-        return res;
+        return count;
     }
 }
