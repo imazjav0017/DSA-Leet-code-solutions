@@ -1,35 +1,35 @@
 class Solution {
     public int orangesRotting(int[][] grid) {
-        int rows=grid.length,cols=grid[0].length;
-        int fresh=0,time=0;
-        Queue<int[]>queue=new ArrayDeque();
-        int[][]dirs={{0,1},{0,-1},{1,0},{-1,0}};
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<cols;j++){
+        int m=grid.length,n=grid[0].length;
+        Queue<int[]>q=new ArrayDeque<>();
+        int freshOranges=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==2)
+                    q.offer(new int[]{i,j});
                 if(grid[i][j]==1)
-                    fresh++;
-                else if(grid[i][j]==2)
-                    queue.add(new int[]{i,j});
+                    freshOranges++;
             }
         }
-        while(!queue.isEmpty() && fresh>0){
-            int n=queue.size();
-            for(int i=0;i<n;i++){
-                int[]x=queue.poll();
-                int r=x[0],c=x[1];
+        int min=0;
+        int[][]dirs=new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+        while(!q.isEmpty() && freshOranges>0){
+            int s=q.size();
+            for(int i=0;i<s;i++){
+                int[]rc=q.poll();
+                int r=rc[0],c=rc[1];
                 for(int[]dir:dirs){
-                int dr=dir[0],dc=dir[1];
-                int nr=dr+r,nc=dc+c;
-                if(nr>=0 && nc>=0 && nr<rows && nc<cols && grid[nr][nc]==1)
-                {
-                    queue.add(new int[]{nr,nc});
+                    int nr=r+dir[0],nc=c+dir[1];
+                    if(nr<0||nc<0||nr>=m||nc>=n||grid[nr][nc]!=1)
+                        continue;
                     grid[nr][nc]=2;
-                    fresh--;
+                    q.offer(new int[]{nr,nc});
+                    freshOranges--;
                 }
             }
-            }
-            time++;
+            min++;
         }
-        return fresh>0?-1:time;
+        if(freshOranges>0)return -1;
+        return min;
     }
 }
