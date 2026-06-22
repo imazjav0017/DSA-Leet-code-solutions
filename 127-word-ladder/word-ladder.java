@@ -2,40 +2,39 @@ class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         if(!wordList.contains(endWord))
             return 0;
-        wordList.add(beginWord);
         int n=wordList.size();
         int m=wordList.get(0).length();
-        Map<String,List<String>>nei=new HashMap<>();
-        Map<String,Boolean>visited=new HashMap<>();
-        for(String word: wordList){
-            for(int j=0;j<m;j++){
-                char[] patt=word.toCharArray();
-                patt[j]='*';
-                String pattern=new String(patt);
-                List<String>matches=nei.getOrDefault(pattern,new ArrayList<String>());
+        Map<String,List<String>>graph=new HashMap<>();
+        Map<String,Boolean> visited=new HashMap<>();
+        wordList.add(beginWord);
+        for(String word:wordList){
+            for(int i=0;i<m;i++){
+                char[]patt=word.toCharArray();
+                patt[i]='*';
+                String ptnStr=new String(patt);
+                List<String>matches=graph.getOrDefault(ptnStr,new ArrayList<>());
                 matches.add(word);
-                nei.put(pattern,matches);
+                graph.put(ptnStr,matches);
             }
             visited.put(word,false);
         }
-        Queue<String>queue=new ArrayDeque<>();
+        Queue<String>q=new ArrayDeque<>();
+        q.offer(beginWord);
         visited.put(beginWord,true);
-        queue.offer(beginWord);
         int res=1;
-        while(!queue.isEmpty()){
-            int s=queue.size();
+        while(!q.isEmpty()){
+            int s=q.size();
             for(int i=0;i<s;i++){
-                String x=queue.poll();
-                if(x.equals(endWord)){
+                String word=q.poll();
+                if(word.equals(endWord))
                     return res;
-                }
                 for(int j=0;j<m;j++){
-                    char[]patt=x.toCharArray();
+                    char[]patt=word.toCharArray();
                     patt[j]='*';
-                    String pattern=new String(patt);
-                    for(String next:nei.get(pattern)){
+                    List<String>matches=graph.get(new String(patt));
+                    for(String next:matches){
                         if(!visited.get(next)){
-                            queue.offer(next);
+                            q.offer(next);
                             visited.put(next,true);
                         }
                     }
