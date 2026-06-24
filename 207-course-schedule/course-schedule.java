@@ -1,47 +1,43 @@
 class Solution {
-    private boolean dfs(Map<Integer,List<Integer>>adj,int c,boolean[]visited,
-    boolean[]completed,int n){
-        List<Integer>p=adj.get(c);
-        visited[c]=true;
-        if(p.size()==0)
-        {
-            completed[c]=true;
-            return true;
-        }
-        for(int p1:p){
-            if(visited[p1] &&!completed[p1])
-                return false;
-            else if(!visited[p1]){
-                boolean x= dfs(adj,p1,visited,completed,n);
-                if(x==false)
-                    return false;
-                else completed[p1]=true;
-            }
-        }
-        completed[c]=true;
-        return true;
-    }
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        if(prerequisites.length==0)
-            return true;
-        Map<Integer,List<Integer>>adj=new HashMap<>();
+        Map<Integer,Integer>InDegree=new HashMap<>();
+        List<Integer>[]graph=new ArrayList[numCourses];
         for(int i=0;i<numCourses;i++){
-            List<Integer>list=new ArrayList<>();
-            adj.put(i,list);
+            InDegree.put(i,0);
+            graph[i]=new ArrayList<>();
         }
-        int m=prerequisites.length,n=prerequisites[0].length;
-        for(int i=0;i<m;i++){
-            List<Integer>p=adj.get(prerequisites[i][0]);
-            p.add(prerequisites[i][1]);
+        Queue<Integer>q=new ArrayDeque<>();
+        for(int[]p:prerequisites){
+            InDegree.put(p[0],InDegree.get(p[0])+1);
+            graph[p[1]].add(p[0]);
         }
         boolean[]visited=new boolean[numCourses];
-        boolean[]completed=new boolean[numCourses];
         for(int i=0;i<numCourses;i++){
-            if(!visited[i]){
-                if(dfs(adj,i,visited,completed,numCourses)==false)
-                    return false;
+            if(InDegree.get(i)==0){
+                q.offer(i);
+                visited[i]=true;
             }
         }
-        return true; 
+        while(!q.isEmpty()){
+            int s=q.size();
+            for(int i=0;i<s;i++){
+                int course=q.poll();
+                List<Integer>dependents=graph[course];
+                for(int c:dependents){
+                    if(!visited[c]){
+                        InDegree.put(c,InDegree.get(c)-1);
+                        if(InDegree.get(c)==0){
+                            q.offer(c);
+                            visited[c]=true;
+                        }
+                    }
+                }
+            }
+        }
+        for(int i=0;i<numCourses;i++){
+            if(InDegree.get(i)!=0)
+                return false;
+        }
+        return true;
     }
 }
