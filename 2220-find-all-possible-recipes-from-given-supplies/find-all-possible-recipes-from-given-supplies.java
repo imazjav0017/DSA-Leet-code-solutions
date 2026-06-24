@@ -1,40 +1,33 @@
 class Solution {
-    boolean dfs(Map<String,List<String>>adj,String recipe,Set<String>supply,Set<String> visit){
-        visit.add(recipe);
-        List<String>ing=adj.get(recipe);
-        for(String i:ing){
-            if(supply.contains(i))
-                continue;
-            else if(!visit.contains(i) && adj.get(i)!=null)
-                {
-                    visit.add(i);
-                    boolean res= dfs(adj,i,supply,visit);
-                    if(!res)
-                        return false;
-                    else
-                        supply.add(i);
-                }
-            else 
-                return false;
-        }
-        supply.add(recipe);
-        return true;
-    }
     public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
-        Map<String,List<String>>adj=new HashMap<>();
-        int n=recipes.length;
-        for(int i=0;i<n;i++){
-            adj.put(recipes[i],ingredients.get(i));
+        Map<String,Integer>indegree=new HashMap<>();
+        Map<String,List<String>>ingToRecipe=new HashMap<>();
+        for(int i=0;i<recipes.length;i++){
+            String recipe=recipes[i];
+            List<String>ingList=ingredients.get(i);
+            indegree.put(recipe,ingList.size());
+            for(String ing:ingList){
+                ingToRecipe.computeIfAbsent(ing,k->new ArrayList<>()).add(recipe);
+            }
         }
-        Set<String>supplyNew=new HashSet<>();
-        for(String x: supplies){
-            supplyNew.add(x);
+        Queue<String>q=new ArrayDeque<>();
+        for(String s:supplies){
+            q.offer(s);
         }
         List<String>res=new ArrayList<>();
-        for(int i=0;i<n;i++){
-            Set<String> visit=new HashSet<>();
-            if(supplyNew.contains(recipes[i])|| dfs(adj,recipes[i],supplyNew,visit))
-                res.add(recipes[i]);
+        while(!q.isEmpty()){
+            String item=q.poll();
+            if(indegree.containsKey(item)){
+                res.add(item);
+            }
+            List<String>dependents=ingToRecipe.get(item);
+            if(dependents!=null){
+                for(String recipe:dependents){
+                    indegree.put(recipe,indegree.getOrDefault(recipe,0)-1);
+                    if(indegree.get(recipe)==0)
+                        q.offer(recipe);
+                }
+            }
         }
         return res;
     }
