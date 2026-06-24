@@ -1,55 +1,42 @@
 class Solution {
-    private boolean dfs(Map<Integer,List<Integer>>adj,int c,List<Integer>res,boolean[]visited,
-    boolean[]completed)
-    {
-        visited[c]=true;
-        List<Integer>p=adj.get(c);
-        if(p==null || p.size()==0){
-            completed[c]=true;
-            res.add(c);
-            return true;
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int n=numCourses;
+        int[] indegree=new int[n];
+        List<Integer>[]graph= new ArrayList[n];
+        for(int i=0;i<n;i++){
+            graph[i]=new ArrayList<>();
         }
-        for(int prc:p){
-            if(visited[prc] && !completed[prc]){
-                return false;
+        for(int[]p:prerequisites){
+            int course=p[0];
+            int pre=p[1];
+            indegree[course]++;
+            graph[pre].add(course);
+        }
+        Queue<Integer>q=new ArrayDeque<>();
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0){
+                q.offer(i);
             }
-            else if(!completed[prc] && !visited[prc]){
-                boolean isValid=dfs(adj,prc,res,visited,completed);
-                if(!isValid)
-                    return false;
-                if(!completed[prc]){
-                    completed[prc]=true;
-                    res.add(prc);
+        }
+        List<Integer>order=new ArrayList<>();
+        int completed=0;
+        while(!q.isEmpty()){
+            completed++;
+            int c=q.poll();
+            order.add(c);
+            for(int next:graph[c]){
+                indegree[next]--;
+                if(indegree[next]==0){
+                    q.offer(next);
                 }
             }
         }
-        if(!completed[c]){
-            completed[c]=true;
-            res.add(c);
-        }
-        return true;
-    }
-    public int[] findOrder(int numCourses, int[][] prerequisites) {
-        Map<Integer,List<Integer>>adj=new HashMap<>();
-        for(int[]pr:prerequisites){
-            int i=pr[0],j=pr[1];
-            List<Integer>p=adj.getOrDefault(i,new ArrayList<Integer>());
-            p.add(j);
-            adj.put(i,p);
-        }
-        List<Integer>res=new ArrayList<>();
-        boolean[]visited=new boolean[numCourses];
-        boolean[]completed=new boolean[numCourses];
-        for(int i=0;i<numCourses;i++){
-            if(!visited[i] && !dfs(adj,i,res,visited,completed))
-            {
-                return new int[0];
+        if(completed==n){
+            int[]res=new int[n];
+            for(int i=0;i<n;i++){
+                res[i]=order.get(i);
             }
-        }
-        int[]order=new int[numCourses];
-        for(int i=0;i<numCourses;i++){
-            order[i]=res.get(i);
-        }
-        return order;
+            return res;
+        }else return new int[0];
     }
 }
