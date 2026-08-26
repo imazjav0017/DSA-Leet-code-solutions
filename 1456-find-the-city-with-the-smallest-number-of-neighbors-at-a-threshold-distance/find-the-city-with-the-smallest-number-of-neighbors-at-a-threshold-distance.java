@@ -1,40 +1,59 @@
 class Solution {
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
-        int[][]dist=new int[n][n];
-        for(int i=0;i<n;i++){
-            Arrays.fill(dist[i],Integer.MAX_VALUE);
-            dist[i][i]=0;
+        int[][] dist = new int[n][n];
+
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dist[i], Integer.MAX_VALUE);
+            dist[i][i] = 0;
         }
-        for(int[]edge:edges){
-            int from=edge[0],to=edge[1],w=edge[2];
-            dist[from][to]=Math.min(dist[from][to],w);
-            dist[to][from]=Math.min(dist[from][to],w);
+
+        // Undirected graph
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+
+            dist[u][v] = Math.min(dist[u][v], w);
+            dist[v][u] = Math.min(dist[v][u], w);
         }
-        Set<Integer>[]counter=new HashSet[n];
-        for(int i=0;i<n;i++){
-            counter[i]=new HashSet<>();
-        }
-        for(int k=0;k<n;k++){
-            for(int i=0;i<n;i++){
-                for(int j=0;j<n;j++){
-                    if(dist[i][k]==Integer.MAX_VALUE || dist[k][j]==Integer.MAX_VALUE)
+
+        // Floyd-Warshall
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+
+                    if (dist[i][k] == Integer.MAX_VALUE ||
+                        dist[k][j] == Integer.MAX_VALUE) {
                         continue;
-                    int newCost=dist[i][k]+dist[k][j];
-                    if(newCost>distanceThreshold)
-                        continue;
-                    dist[i][j]=Math.min(dist[i][j],newCost);
-                    counter[i].add(j);
+                    }
+
+                    dist[i][j] = Math.min(
+                        dist[i][j],
+                        dist[i][k] + dist[k][j]
+                    );
                 }
             }
         }
-        int res=0,min=n+1;
-        for(int i=0;i<n;i++){
-            int count=counter[i].size();
-            if(count<=min){
-                min=count;
-                res=i;
+
+        int result = -1;
+        int minReachable = Integer.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            int count = 0;
+
+            for (int j = 0; j < n; j++) {
+                if (i != j && dist[i][j] <= distanceThreshold) {
+                    count++;
+                }
+            }
+
+            // <= handles tie by choosing larger city index
+            if (count <= minReachable) {
+                minReachable = count;
+                result = i;
             }
         }
-        return res;
+
+        return result;
     }
 }
