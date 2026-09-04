@@ -3,6 +3,8 @@ class Solution {
         long sum=0;
         for(int i:time){
             sum+=mid/i;
+            if(sum>=x)
+                return true;
         }
         return sum>=x;
     }
