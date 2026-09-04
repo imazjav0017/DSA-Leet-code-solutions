@@ -2,7 +2,7 @@ class Solution {
     boolean canDo(int[]nums,int mid, int max){
         int op=0;
         for(int i=0;i<nums.length;i++){
-            op+=(nums[i]-1)/mid;
+            op+=(long) Math.ceil((double) nums[i] / mid) - 1;
             if(op>max)
                 return false;
         }
