@@ -5,6 +5,8 @@ class Solution {
             hours+=piles[i]/speed;
             if(piles[i]%speed!=0)
                 hours+=1;
+            if(hours>max)
+                return false;
         }
         return hours<=max;
     }
