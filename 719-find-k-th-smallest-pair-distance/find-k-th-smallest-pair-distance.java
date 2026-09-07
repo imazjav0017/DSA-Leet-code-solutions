@@ -1,6 +1,5 @@
 class Solution {
     boolean canDo(int[]nums,int mid,int k){
-        Arrays.sort(nums);
         int left=0;
         int count=0;
         for(int right=0;right<nums.length;right++){
@@ -14,11 +13,8 @@ class Solution {
         return false;
     }
     public int smallestDistancePair(int[] nums, int k) {
-        int max=nums[0],min=nums[0];
-        for(int i:nums){
-            max=Math.max(max,i);
-            min=Math.min(min,i);
-        }
+        Arrays.sort(nums);;
+        int max=nums[nums.length-1],min=nums[0];
         int left=0, right=Math.abs(max-min);
         while(left<right){
             int mid=left+(right-left)/2;
