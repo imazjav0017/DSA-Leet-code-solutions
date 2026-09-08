@@ -13,7 +13,7 @@ class Solution {
         PriorityQueue<Integer>pq=new PriorityQueue<>(Collections.reverseOrder());
         int totalQuality=0;
         double answer=Double.MAX_VALUE;
-        for(int i=0;i<workers.length;i++){
+        for(int i=0;i<n;i++){
             double ratio=workers[i][0];
             totalQuality+=workers[i][1];
             pq.offer((int)workers[i][1]);
