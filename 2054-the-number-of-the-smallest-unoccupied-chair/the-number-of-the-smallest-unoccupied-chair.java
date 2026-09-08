@@ -5,9 +5,9 @@ class Solution {
         PriorityQueue<Integer>pq=new PriorityQueue<>();
         //[Leaving time, chair]
         PriorityQueue<int[]>heap=new PriorityQueue<>((a,b)->{
-            if(a[0]!=b[0])
+            
                 return Integer.compare(a[0],b[0]);
-            return Integer.compare(a[1],b[1]);
+          
         });
         for(int i=0;i<times.length;i++){
             pq.offer(i);
