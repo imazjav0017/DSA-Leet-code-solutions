@@ -1,12 +1,6 @@
 class Solution {
     public int smallestChair(int[][] times, int targetFriend) {
-        int targetTime=0;
-        for(int i=0;i<times.length;i++){
-            if(i==targetFriend){
-                targetTime=times[i][0];
-                break;
-            }
-        }
+        int targetTime = times[targetFriend][0];
         Arrays.sort(times,(a,b)->Integer.compare(a[0],b[0]));
         PriorityQueue<Integer>pq=new PriorityQueue<>();
         //[Leaving time, chair]
