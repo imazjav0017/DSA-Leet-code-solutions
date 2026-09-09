@@ -2,16 +2,14 @@ class Solution {
     public String reorganizeString(String s) {
         int n=s.length();
         char[]arr=s.toCharArray();
-        int[][]count=new int[26][2];
+        int[]count=new int[26];
         for(char c: arr){
-            int asci=c-'a';
-            count[asci][0]=asci;
-            count[asci][1]++;
+            count[c-'a']++;
         }
         PriorityQueue<int[]>pq=new PriorityQueue<>((a,b)->Integer.compare(b[1],a[1]));
-        for(int[]c:count){
-            if(c[1]>0)
-                pq.offer(c);
+        for(int i=0;i<26;i++){
+            if(count[i]>0)
+                pq.offer(new int[]{i,count[i]});
         }
         char[]res=new char[n];
         int idx=0;
