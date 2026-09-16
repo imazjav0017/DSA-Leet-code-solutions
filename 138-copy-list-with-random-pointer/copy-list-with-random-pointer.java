@@ -18,12 +18,13 @@ class Solution {
     public Node copyRandomList(Node head) {
         if(head==null)
             return null;
-        if(map.containsKey(head))
+        if(map.containsKey(head)){
             return map.get(head);
-        Node copy=new Node(head.val);
-        map.put(head,copy);
-        copy.next=copyRandomList(head.next);
-        copy.random=copyRandomList(head.random);
-        return copy;
+        }
+        Node node=new Node(head.val);
+        map.put(head,node);
+        node.next=copyRandomList(head.next);
+        node.random=copyRandomList(head.random);
+        return node;
     }
 }
