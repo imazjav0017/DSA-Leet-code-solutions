@@ -5,7 +5,7 @@ class Solution {
         boolean[][]palindrome=new boolean[n][n];
         for(int i=n-1;i>=0;i--){
             for(int j=i;j<n;j++){
-                if(s.charAt(i)==s.charAt(j) && (j-i<=2 || palindrome[i+1][j-1])){
+                if(s.charAt(i)==s.charAt(j) && (j-i<=1 || palindrome[i+1][j-1])){
                     palindrome[i][j]=true;
                 }
             }
