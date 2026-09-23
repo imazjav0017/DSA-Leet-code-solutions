@@ -2,38 +2,43 @@ class Solution {
     public int largestPathValue(String colors, int[][] edges) {
         int n=colors.length();
         List<Integer>[]graph=new ArrayList[n];
-        int[] indegree=new int[n];
         for(int i=0;i<n;i++){
             graph[i]=new ArrayList<>();
         }
-        for(int[]e:edges){
-            int from=e[0],to=e[1];
-            graph[from].add(to);
+        int[]indegree=new int[n];
+        for(int[]edge:edges){
+            int from=edge[0],to=edge[1];
             indegree[to]++;
+            graph[from].add(to);
         }
-        int[][]dp=new int[n][26];
         Queue<Integer>q=new ArrayDeque<>();
-        int processed=0,answer=0;
         for(int i=0;i<n;i++){
             if(indegree[i]==0)
                 q.offer(i);
         }
+        //dp[node][color]= max count of color with path ending at node
+        int[][]dp=new int[n][26];
+        int processed=0,res=0;
         while(!q.isEmpty()){
+            int from=q.poll();
             processed++;
-            int node=q.poll();
-            int color=colors.charAt(node)-'a';
-            dp[node][color]++;
-            answer=Math.max(answer,dp[node][color]);
-            for(int next:graph[node]){
+            int colorAtNode=colors.charAt(from)-'a';
+            dp[from][colorAtNode]+=1;
+            for(int c=0;c<26;c++){
+                res=Math.max(res,dp[from][c]);
+            }
+            for(int to: graph[from]){
                 for(int c=0;c<26;c++){
-                    dp[next][c]=Math.max(dp[next][c],dp[node][c]);
+                    dp[to][c]=Math.max(dp[to][c],dp[from][c]);
                 }
-                indegree[next]--;
-                if(indegree[next]==0)
-                    q.offer(next);
+                indegree[to]--;
+                if(indegree[to]==0){
+                    q.offer(to);
+                }
             }
         }
-        if(processed!=n)return -1;
-        return answer;
+        if(processed!=n)
+            return -1;
+        return res;
     }
 }
