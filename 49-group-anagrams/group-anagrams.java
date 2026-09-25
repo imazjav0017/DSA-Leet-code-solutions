@@ -1,26 +1,18 @@
 class Solution {
-    /* nklog k sort each element
-    for each :
-    original string;
-        sort str[i];//klog k
-        add to hashmap()
-    */
     public List<List<String>> groupAnagrams(String[] strs) {
-       int n= strs.length;
-       List<List<String>>res=new ArrayList<>();
-       Map<String,List<String>> map= new HashMap<>();
-       for(int i=0;i<n;i++){
-        String s= strs[i];
-        char []arr=s.toCharArray();
-        Arrays.sort(arr);
-        String sorted = new String(arr);
-        List<String> x= map.getOrDefault(sorted,new ArrayList<String>());
-        x.add(s);
-        map.put(sorted,x);
-       }
-       map.forEach((key,value)->{
-        res.add(value);
-       });
-       return res;
+        Map<String,List<String>>map=new HashMap<>();
+        for(String s:strs){
+            char[]seq=s.toCharArray();
+            Arrays.sort(seq);
+            String sorted=new String(seq);
+            List<String>list=map.getOrDefault(sorted,new ArrayList<>());
+            list.add(s);
+            map.put(sorted,list);
+        }
+        List<List<String>>res=new ArrayList<>();
+        for(String s:map.keySet()){
+            res.add(map.get(s));
+        }
+        return res;
     }
 }
