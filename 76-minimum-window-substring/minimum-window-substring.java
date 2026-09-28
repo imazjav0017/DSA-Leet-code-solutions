@@ -1,41 +1,56 @@
 class Solution {
-    //Refer older submission for logic clarity 
     public String minWindow(String s, String t) {
-        if (s.length() < t.length()) return "";
 
-        int[] need = new int[128];
-        int required = t.length();
+        int n1 = s.length();
+        int n2 = t.length();
 
-        for (char c : t.toCharArray()) {
-            need[c]++;
+        if (n2 > n1)
+            return "";
+
+        Map<Character, Integer> target = new HashMap<>();
+        Map<Character, Integer> window = new HashMap<>();
+
+        for (int i = 0; i < n2; i++) {
+            char ch = t.charAt(i);
+            target.put(ch, target.getOrDefault(ch, 0) + 1);
         }
 
+        int need = target.size();
+        int have = 0;
         int left = 0;
+
         int minLen = Integer.MAX_VALUE;
-        int start = 0;
+        int minStart = 0;
 
-        for (int right = 0; right < s.length(); right++) {
-            char c = s.charAt(right);
+        for (int right = 0; right < n1; right++) {
 
-            if (need[c] > 0) {
-                required--;
+            char ch = s.charAt(right);
+
+            window.put(ch, window.getOrDefault(ch, 0) + 1);
+
+            if (target.containsKey(ch) &&
+                window.get(ch).equals(target.get(ch))) {
+                have++;
             }
 
-            need[c]--;
+            while (have == need) {
 
-            while (required == 0) {
-                int len = right - left + 1;
-
-                if (len < minLen) {
-                    minLen = len;
-                    start = left;
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    minStart = left;
                 }
 
-                char leftChar = s.charAt(left);
-                need[leftChar]++;
+                char l = s.charAt(left);
 
-                if (need[leftChar] > 0) {
-                    required++;
+                window.put(l, window.get(l) - 1);
+
+                if (target.containsKey(l) &&
+                    window.get(l) < target.get(l)) {
+                    have--;
+                }
+
+                if (window.get(l) <= 0) {
+                    window.remove(l);
                 }
 
                 left++;
@@ -44,6 +59,6 @@ class Solution {
 
         return minLen == Integer.MAX_VALUE
                 ? ""
-                : s.substring(start, start + minLen);
+                : s.substring(minStart, minStart + minLen);
     }
 }
