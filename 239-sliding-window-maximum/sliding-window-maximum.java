@@ -1,21 +1,22 @@
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        PriorityQueue<Integer>pq=new PriorityQueue<>((a,b)->Integer.compare(nums[b],nums[a]));
-        int[]res=new int[nums.length-k+1];
-        for(int i=0;i<k;i++){
-            pq.offer(i);
+     Deque<Integer>deque=new ArrayDeque<>();
+     int[]res=new int[nums.length-k+1];
+     int idx=0;
+     for(int right=0;right<nums.length;right++){
+        // if elements at top of dq are not in range anymore remve it
+        //for value right , left = right-k+1
+        while(!deque.isEmpty() && deque.peekFirst()<right-k+1){
+            deque.pollFirst();
         }
-        res[0]=nums[pq.peek()];
-        int idx=1;
-        int left=1;
-        for(int i=k;i<nums.length;i++){
-            while(!pq.isEmpty() && pq.peek()<left){
-                pq.poll();
-            }
-            pq.offer(i);
-            res[idx++]=nums[pq.peek()];
-            left++;
+        while(!deque.isEmpty() && nums[deque.peekLast()]<=nums[right]){
+            deque.pollLast();
         }
-        return res;
+        deque.offerLast(right);
+        if(right>=k-1){
+            res[idx++]=nums[deque.peekFirst()];
+        }
+     }
+     return res;
     }
 }
