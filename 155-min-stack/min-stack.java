@@ -1,19 +1,21 @@
 class MinStack {
-    private Stack<Integer>minList=new Stack<>();
-    private Stack<Integer>stack=new Stack<>();
+    Deque<Integer>stack,mono;//monotonic stack with increasing order
     public MinStack() {
+        stack=new ArrayDeque<>();
+        mono=new ArrayDeque<>();
     }
     
-    public void push(int val) {
-        stack.push(val);
-        if(minList.isEmpty()||val<=minList.peek()){
-            minList.push(val);
+    public void push(int value) {
+        stack.push(value);
+        if(mono.isEmpty()|| value<=mono.peek()){
+            mono.push(value);
         }
     }
     
     public void pop() {
-        if(stack.peek().equals(minList.peek()))
-            minList.pop();
+        if(mono.peek().equals(stack.peek())){
+            mono.pop();
+        }
         stack.pop();
     }
     
@@ -22,14 +24,14 @@ class MinStack {
     }
     
     public int getMin() {
-        return minList.empty()?-1:minList.peek();
+        return mono.isEmpty()?-1:mono.peek();
     }
 }
 
 /**
  * Your MinStack object will be instantiated and called as such:
  * MinStack obj = new MinStack();
- * obj.push(val);
+ * obj.push(value);
  * obj.pop();
  * int param_3 = obj.top();
  * int param_4 = obj.getMin();
