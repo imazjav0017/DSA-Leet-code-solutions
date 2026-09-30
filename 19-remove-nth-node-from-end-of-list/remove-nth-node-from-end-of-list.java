@@ -24,6 +24,5 @@ class Solution {
         }
         prev.next=slow.next;
         return dummy.next;
-
     }
 }
