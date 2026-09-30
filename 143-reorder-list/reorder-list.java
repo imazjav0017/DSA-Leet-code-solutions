@@ -31,16 +31,25 @@ class Solution {
         }
         return prev;
     }
-   void merge(ListNode left, ListNode right) {
-    while (right != null) {
-        ListNode leftNext = left.next;
-        ListNode rightNext = right.next;
-
-        left.next = right;
-        right.next = leftNext;
-
-        left = leftNext;
-        right = rightNext;
+    ListNode merge(ListNode list1, ListNode list2){
+        ListNode dummy=new ListNode(0);
+        ListNode curr=dummy;
+        int next=1;
+        while(list1!=null && list2!=null){
+            if(next==1){
+                curr.next=list1;
+                list1=list1.next;
+                next=2;
+            }
+            else{
+                curr.next=list2;
+                list2=list2.next;
+                next=1;
+            }
+            curr=curr.next;
+        }
+        if(list1!=null)curr.next=list1;
+        else if(list2!=null)curr.next=list2;
+        return dummy.next;
     }
-}
 }
