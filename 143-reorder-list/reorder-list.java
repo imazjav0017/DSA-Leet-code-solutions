@@ -31,7 +31,7 @@ class Solution {
         }
         return prev;
     }
-    ListNode merge(ListNode list1, ListNode list2){
+    void merge(ListNode list1, ListNode list2){
         ListNode dummy=new ListNode(0);
         ListNode curr=dummy;
         int next=1;
@@ -50,6 +50,5 @@ class Solution {
         }
         if(list1!=null)curr.next=list1;
         else if(list2!=null)curr.next=list2;
-        return dummy.next;
     }
 }
