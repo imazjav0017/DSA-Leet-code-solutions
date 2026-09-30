@@ -1,37 +1,38 @@
 class Entry{
-    public String value;
-    public int timeStamp;
-    public Entry(String value,int timeStamp){
+    public String key,value;
+    public int time;
+    public Entry(String key, String value, int time){
+        this.key=key;
         this.value=value;
-        this.timeStamp=timeStamp;
+        this.time=time;
     }
 }
 class TimeMap {
-    Map<String,List<Entry>>map;
+    Map<String,List<Entry>> map;
     public TimeMap() {
-        map=new HashMap<>();
+       map=new HashMap<>();
     }
     
     public void set(String key, String value, int timestamp) {
-        List<Entry>entries=map.getOrDefault(key,new ArrayList<>());
-        entries.add(new Entry(value,timestamp));
-        map.put(key,entries);
+      List<Entry>list=map.getOrDefault(key,new ArrayList<>());
+      list.add(new Entry(key,value,timestamp));
+      map.put(key,list);
     }
     
     public String get(String key, int timestamp) {
-        List<Entry>entries=map.get(key);
-        if(entries==null)
+        List<Entry>list=map.get(key);
+        if(list==null)
             return "";
-        int left=0,right=entries.size();
-        while(left<right){
-            int mid=left+(right-left)/2;
-            if(entries.get(mid).timeStamp>timestamp)
-                right=mid;
-            else left=mid+1;
+       int left=0;
+       int right=list.size();
+       while(left<right){
+        int mid=left+(right-left)/2;
+        if(list.get(mid).time>timestamp){
+            right=mid;
         }
-        if(left==0)
-            return "";
-        return entries.get(left-1).value;
+        else left=mid+1;
+       }
+       return left==0?"":list.get(left-1).value;
     }
 }
 
