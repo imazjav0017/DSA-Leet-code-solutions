@@ -24,7 +24,6 @@ class Solution {
             if(x.next!=null)pq.offer(x.next);
             curr=curr.next;
         }
-        curr.next=null;
         return dummy.next;
     }
 }
