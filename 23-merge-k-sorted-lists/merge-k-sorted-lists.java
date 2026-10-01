@@ -16,13 +16,12 @@ class Solution {
         ListNode curr=dummy;
         for(int i=0;i<k;i++){
             ListNode x=lists[i];
-            while(x!=null){
-                pq.offer(x);
-                x=x.next;
-            }
+            if(x!=null)pq.offer(x);
         }
         while(!pq.isEmpty()){
-            curr.next=pq.poll();
+            ListNode x=pq.poll();
+            curr.next=x;
+            if(x.next!=null)pq.offer(x.next);
             curr=curr.next;
         }
         curr.next=null;
