@@ -27,7 +27,6 @@ class Solution {
         }
         ListNode oldStart=groupPrev.next;
         groupPrev.next=kth;
-        oldStart.next=groupNext;
         groupPrev=oldStart;
        }
        return dummy.next;
