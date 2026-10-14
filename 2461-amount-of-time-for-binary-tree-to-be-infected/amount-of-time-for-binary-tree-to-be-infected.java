@@ -14,54 +14,46 @@
  * }
  */
 class Solution {
-    Map<TreeNode,TreeNode>parentMap=new HashMap<>();
-    void dfs(TreeNode root){
-        if(root==null) return;
-        if(root.left!=null)
-            parentMap.put(root.left,root);
-        if(root.right!=null)
-            parentMap.put(root.right,root);
-        dfs(root.left);
-        dfs(root.right);
-    }
-    TreeNode findNode(TreeNode root,int target){
-        if(root==null)
-            return null;
-        if(root.val==target)
-            return root;
-        TreeNode left=findNode(root.left,target);
-        if(left!=null) return left;
-        return findNode(root.right,target);
-
+    TreeNode startNode=null;
+    void buildGraph(TreeNode root,Map<TreeNode,TreeNode>map,int start){
+        if(root.val==start)
+            startNode=root;
+        if(root.left!=null){
+            map.put(root.left,root);
+            buildGraph(root.left,map,start);
+        }
+        if(root.right!=null){
+            map.put(root.right,root);
+            buildGraph(root.right,map,start);
+        }
     }
     public int amountOfTime(TreeNode root, int start) {
+        Map<TreeNode,TreeNode>map=new HashMap<>();
+        buildGraph(root,map,start);
         Queue<TreeNode>q=new ArrayDeque<>();
-        dfs(root);
-        TreeNode startNode=findNode(root,start);
         q.offer(startNode);
         int min=-1;
         Set<Integer>visited=new HashSet<>();
         visited.add(startNode.val);
         while(!q.isEmpty()){
-            int n=q.size();
-            for(int i=0;i<n;i++){
-                TreeNode x=q.poll();
-                if(x.left!=null && !visited.contains(x.left.val)){
-                    q.offer(x.left);
-                    visited.add(x.left.val);
+            int s=q.size();
+            min++;
+            for(int i=0;i<s;i++){
+                TreeNode node=q.poll();
+                if(node.left!=null && !visited.contains(node.left.val)){
+                    q.offer(node.left);
+                    visited.add(node.left.val);
                 }
-                if(x.right!=null && !visited.contains(x.right.val)){
-                    q.offer(x.right);
-                    visited.add(x.right.val);
+                if(node.right!=null && !visited.contains(node.right.val)){
+                    q.offer(node.right);
+                    visited.add(node.right.val);
                 }
-                if(parentMap.containsKey(x) && !visited.contains(parentMap.get(x).val)){
-                    q.offer(parentMap.get(x));
-                    visited.add(parentMap.get(x).val);
+                if(map.getOrDefault(node,null)!=null && !visited.contains(map.get(node).val)){
+                    q.offer(map.get(node));
+                    visited.add(map.get(node).val);
                 }
             }
-            min++;
         }
         return min;
-
     }
 }
