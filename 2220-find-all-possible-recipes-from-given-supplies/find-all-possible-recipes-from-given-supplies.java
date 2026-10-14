@@ -1,13 +1,15 @@
 class Solution {
     public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
-        Map<String,Integer>indegree=new HashMap<>();
-        Map<String,List<String>>ingToRecipe=new HashMap<>();
+        Map<String,Integer>indegrees=new HashMap<>();
+        Map<String,List<String>>graph=new HashMap<>();
         for(int i=0;i<recipes.length;i++){
-            String recipe=recipes[i];
             List<String>ingList=ingredients.get(i);
-            indegree.put(recipe,ingList.size());
-            for(String ing:ingList){
-                ingToRecipe.computeIfAbsent(ing,k->new ArrayList<>()).add(recipe);
+            String recipe=recipes[i];
+            indegrees.put(recipe,ingList.size());
+            for(String s:ingList){
+                List<String>list=graph.getOrDefault(s,new ArrayList<>());
+                list.add(recipe);
+                graph.put(s,list);
             }
         }
         Queue<String>q=new ArrayDeque<>();
@@ -16,16 +18,14 @@ class Solution {
         }
         List<String>res=new ArrayList<>();
         while(!q.isEmpty()){
-            String item=q.poll();
-            if(indegree.containsKey(item)){
-                res.add(item);
+            String s=q.poll();
+            if(indegrees.containsKey(s)){
+                res.add(s);
             }
-            List<String>dependents=ingToRecipe.get(item);
-            if(dependents!=null){
-                for(String recipe:dependents){
-                    indegree.put(recipe,indegree.getOrDefault(recipe,0)-1);
-                    if(indegree.get(recipe)==0)
-                        q.offer(recipe);
+            for(String next:graph.getOrDefault(s,new ArrayList<>())){
+                indegrees.put(next,indegrees.get(next)-1);
+                if(indegrees.get(next)==0){
+                    q.offer(next);
                 }
             }
         }
