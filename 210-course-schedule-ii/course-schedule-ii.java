@@ -1,42 +1,33 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        int n=numCourses;
-        int[] indegree=new int[n];
-        List<Integer>[]graph= new ArrayList[n];
-        for(int i=0;i<n;i++){
+        List<Integer>[]graph=new ArrayList[numCourses];
+        for(int i=0;i<numCourses;i++){
             graph[i]=new ArrayList<>();
         }
-        for(int[]p:prerequisites){
-            int course=p[0];
-            int pre=p[1];
-            indegree[course]++;
-            graph[pre].add(course);
+        int[]indegree=new int[numCourses];
+        for(int[]pq:prerequisites){
+            int from=pq[1],to=pq[0];
+            indegree[to]++;
+            graph[from].add(to);
         }
         Queue<Integer>q=new ArrayDeque<>();
-        for(int i=0;i<n;i++){
-            if(indegree[i]==0){
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0)
                 q.offer(i);
-            }
         }
-        List<Integer>order=new ArrayList<>();
-        int completed=0;
+        int processedNodes=0;
+        int[]res=new int[numCourses];
+        int idx=0;
         while(!q.isEmpty()){
-            completed++;
-            int c=q.poll();
-            order.add(c);
-            for(int next:graph[c]){
-                indegree[next]--;
-                if(indegree[next]==0){
-                    q.offer(next);
-                }
+            int node=q.poll();
+            res[idx++]=node;
+            processedNodes++;
+            for(int ne:graph[node]){
+                indegree[ne]--;
+                if(indegree[ne]==0)
+                    q.offer(ne);
             }
         }
-        if(completed==n){
-            int[]res=new int[n];
-            for(int i=0;i<n;i++){
-                res[i]=order.get(i);
-            }
-            return res;
-        }else return new int[0];
+        return processedNodes==numCourses?res:new int[0];
     }
 }
