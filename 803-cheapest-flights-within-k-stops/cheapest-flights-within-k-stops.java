@@ -3,7 +3,7 @@ class Solution {
         int[]dist=new int[n];
         Arrays.fill(dist,Integer.MAX_VALUE);
         dist[src]=0;
-        for(int i=0;i<k+1;i++){
+        for(int i=0;i<=k;i++){
             int[]temp=dist.clone();
             for(int[]flight:flights){
                 int from=flight[0],to=flight[1],cost=flight[2];
