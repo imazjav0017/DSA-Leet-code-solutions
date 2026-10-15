@@ -1,24 +1,23 @@
 class Solution {
     public List<String> findItinerary(List<List<String>> tickets) {
-        Map<String, PriorityQueue<String>> graph = new HashMap<>();
-        
-        for (List<String> ticket : tickets) {
-            graph.putIfAbsent(ticket.get(0), new PriorityQueue<>());
-            graph.get(ticket.get(0)).add(ticket.get(1));
+        Map<String,PriorityQueue<String>>map=new HashMap<>();
+        for(List<String> ticket:tickets){
+            String from=ticket.get(0),to=ticket.get(1);
+            map.putIfAbsent(from,new PriorityQueue<>());
+            PriorityQueue<String>pq=map.get(from);
+            pq.offer(to);
         }
-        
-        LinkedList<String> itinerary = new LinkedList<>();
-        
-        dfs("JFK", graph, itinerary);
-        
-        return itinerary;
+        List<String>res=new ArrayList<>();
+        dfs(res,"JFK",map);
+        Collections.reverse(res);
+        return res;
     }
-    
-    private void dfs(String airport, Map<String, PriorityQueue<String>> graph, LinkedList<String> itinerary) {
-        PriorityQueue<String> nextAirports = graph.get(airport);
-        while (nextAirports != null && !nextAirports.isEmpty()) {
-            dfs(nextAirports.poll(), graph, itinerary);
+    void dfs(List<String>res,String from,Map<String,PriorityQueue<String>>map){
+        PriorityQueue<String>pq=map.get(from);
+        while(pq!=null && !pq.isEmpty()){
+            String to =pq.poll();
+            dfs(res,to,map);
         }
-        itinerary.addFirst(airport);
+        res.add(from);
     }
 }
