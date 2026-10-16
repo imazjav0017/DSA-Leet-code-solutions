@@ -14,23 +14,20 @@
  * }
  */
 class Solution {
-    int smallest=0;
-    int count=0;
+    int count=0, ans=-1;
     void inorder(TreeNode root,int k){
-        if(root==null)
-            return;
-        inorder(root.left,k);
-        count++;
-        if(count==k){
-            smallest= root.val;
+        if(root==null){
             return;
         }
-        if(count>=k)
-            return;
+        if(ans==-1){
+        inorder(root.left,k);
+        count++;
+        if(count==k)ans=root.val;
         inorder(root.right,k);
+        }
     }
     public int kthSmallest(TreeNode root, int k) {
         inorder(root,k);
-        return smallest;
+        return ans;
     }
 }
