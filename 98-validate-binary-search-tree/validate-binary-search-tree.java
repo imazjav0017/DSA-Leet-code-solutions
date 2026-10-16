@@ -14,22 +14,15 @@
  * }
  */
 class Solution {
-    boolean isValid=true;
     Integer prev=null;
-    void inorder(TreeNode root){
-        if(root==null)
-            return;
-        inorder(root.left);
-        if(prev!=null && prev>=root.val){
-            isValid=false;
-            return;
-        }
-        if(!isValid)return;
-        prev=root.val;
-        inorder(root.right);
-    }
     public boolean isValidBST(TreeNode root) {
-        inorder(root);
-        return isValid;
+        if(root==null)
+            return true;
+        boolean left=isValidBST(root.left);
+        if(prev!=null && root.val<=prev)
+            return false;
+        prev=root.val;
+        boolean right=isValidBST(root.right);
+        return left && right;
     }
 }
