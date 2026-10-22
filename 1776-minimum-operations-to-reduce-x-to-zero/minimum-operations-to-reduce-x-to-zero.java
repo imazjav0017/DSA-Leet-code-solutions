@@ -6,16 +6,12 @@ class Solution {
             sum+=i;
         }
         int target=sum-x;
-        if(target<0)
-            return -1;
-        if(target==0)
-            return nums.length;
         int len=-1;
         int left=0;
         int windowSum=0;
         for(int right=0;right<n;right++){
             windowSum+=nums[right];
-            while(windowSum>target){
+            while(left<=right && windowSum>target){
                 windowSum-=nums[left];
                 left++;
             }
