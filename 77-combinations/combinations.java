@@ -6,8 +6,10 @@ class Solution {
         return res;
     }
     void backtrack(int n,int k, int start, List<Integer>current,List<List<Integer>>res){
-        if(current.size()==k)
+        if(current.size()==k){
             res.add(new ArrayList<>(current));
+            return;
+        }
         for(int i=start;i<=n;i++){
             current.add(i);
             backtrack(n,k,i+1,current,res);
